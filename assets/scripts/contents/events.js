@@ -1,6 +1,4 @@
 const getFormFields = require(`../../../lib/get-form-fields`)
-const store = require('../store')
-// const showContent = require('../templates/content-listing.handlebars')
 const api = require('./api')
 const ui = require('./ui')
 
@@ -13,28 +11,48 @@ const onCreateContent = function (event) {
 }
 
 const onGetPostContent = function (event) {
-  api.getContent()
-    .then(ui.getPostsSuccess)
-    .catch(ui.getPostsFailure)
+  // only fetch data when accordion is going to expand
+  if ($(event.target).attr('class') === 'collapsed') {
+    api.getContent()
+      .then(ui.getPostsSuccess)
+      .catch(ui.getPostsFailure)
+  }
 }
 
 const onGetPageContent = function (event) {
-  api.getContent()
-    .then(ui.getPagesSuccess)
-    .catch(ui.getPagesFailure)
+  // only fetch data when accordion is going to expand
+  if ($(event.target).attr('class') === 'collapsed') {
+    api.getContent()
+      .then(ui.getPagesSuccess)
+      .catch(ui.getPagesFailure)
+  }
 }
 
 const onViewOneBlog = function (event) {
-  store.userid = getFormFields(this).userid
+  const email = getFormFields(this).email
   event.preventDefault()
-  api.getOneBlog()
+  api.getOneBlog(email)
     .then(ui.getOneBlogSuccess)
     .catch(ui.getOneBlogFailure)
 }
 
+const onChangeCreateContentMessage = function (event) {
+  $('#message').text('Start Telling Your Story:')
+}
+
+const onGetPageList = function (event) {
+  event.preventDefault()
+  const email = getFormFields(this).email
+  api.getOnePage(email)
+    .then(ui.populatePageList)
+    .catch(ui.getPageFailure)
+}
+
 const addHandlers = function () {
   $('#create-content').on('submit', onCreateContent)
+  $('.mb-0').on('click', onChangeCreateContentMessage)
   $('.get-blogs').on('submit', onViewOneBlog)
+  $('.get-page-list').on('submit', onGetPageList)
   $('#view-posts').on('click', onGetPostContent)
   $('#view-pages').on('click', onGetPageContent)
 }

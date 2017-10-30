@@ -2,12 +2,9 @@ const store = require('../store')
 
 const signUpSuccess = function (data) {
   store.user = data.user
-  $('#message').text('You have succesfully signed up!')
+  $('#message').text('You have succesfully signed up! Now User Your Details To Log In.')
   $('#sign-up').hide()
-  // $('#blurb').hide()
   $('#sign-in').show()
-  $('#accordion').show()
-  $('#blogcontent').show()
 }
 
 const signUpFailure = function () {
@@ -21,7 +18,6 @@ const signInSuccess = function (data) {
   $('#sign-out').show()
   $('#accordion').show()
   $('#blogcontent').show()
-  // $('#blurb').hide()
   $('#sign-up').hide()
   $('#sign-in').hide()
 }
@@ -49,11 +45,24 @@ const signOutSuccess = function (data) {
   $('#sign-in').show()
   $('#change-password').hide()
   $('#sign-out').hide()
+  // collapse accordions on sign-out
+  $('#view-pages').addClass('collapsed')
+  $('#view-posts').addClass('collapsed')
+  $('#collapseOne').removeClass('in')
+  $('#collapseTwo').removeClass('in')
+  $('#collapseThree').removeClass('in')
   $('#accordion').hide()
-  // $('#blogcontent').hide()
+  // clear out users pages and posts
+  $('.post-list').empty()
+  $('.page-list').empty()
   $('#sign-in').trigger('reset')
   $('#sign-up').trigger('reset')
-  // $('#blurb').show()
+  $('#create-content').trigger('reset')
+  $('.showblogs').addClass('hidden')
+  $('#selectPage').empty()
+  $('#selectPage').addClass('hidden')
+  $('.showpage').addClass('hidden')
+  $('form').trigger('reset')
 }
 
 const signOutFailure = function () {
